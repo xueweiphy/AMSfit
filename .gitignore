@@ -1,60 +1,60 @@
-       FERMI_total_12months.dat
-       Key.dat
-       LICENCE
-       Makefile
-       PAMELA_electrons.dat
-       README
-       Root/
-       backmakefile
-       backresult.txt
-       backup/
-       chains/
-       chains2/
-       epmain
-       epmain_test2
-       eptestF.tar
-       eptestF/
-       eptestF_v2.tar
-       eptestF_v2.tar.gz
-       eptestF_v3.tar
-       eptestF_v4.tar.gz
-       example_ackley/
-       example_eggbox_C++/
-       example_eggbox_C/
-       example_gauss_shell/
-       example_gaussian/
-       example_himmelblau/
-       example_obj_detect/
-       example_rosenbrock/
-       fort.22
-       gauss_shell
-       kmeans_clstr.f90
-       kmeans_clstr.mod
-       kmeans_clstr.o
-       libnest3.a
-       makeep
-       nested.F90
-       nested.mod
-       nested.o
-       obj_detect
-       posterior.F90
-       posterior.mod
-       posterior.o
-       priors.f90
-       priors.mod
-       priors.o
-       randomns.mod
-       resutlJuly301041.txt
-       spectrum_FERMI.dat
-       spectrum_amp.dat
-       spectrum_stepf.dat
-       test.data
-       utils.f90
-       utils.o
-       utils1.f90
-       utils1.mod
-       utils1.o
-       xmeans_clstr.f90
-       xmeans_clstr.mod
-       xmeans_clstr.o
+FERMI_total_12months.dat
+Key.dat
+LICENCE
+Makefile
+PAMELA_electrons.dat
+README
+Root/
+backmakefile
+backresult.txt
+backup/
+chains/
+chains2/
+epmain
+epmain_test2
+eptestF.tar
+eptestF/
+eptestF_v2.tar
+eptestF_v2.tar.gz
+eptestF_v3.tar
+eptestF_v4.tar.gz
+example_ackley/
+example_eggbox_C++/
+example_eggbox_C/
+example_gauss_shell/
+example_gaussian/
+example_himmelblau/
+example_obj_detect/
+example_rosenbrock/
+fort.22
+gauss_shell
+kmeans_clstr.f90
+kmeans_clstr.mod
+kmeans_clstr.o
+libnest3.a
+makeep
+nested.F90
+nested.mod
+nested.o
+obj_detect
+posterior.F90
+posterior.mod
+posterior.o
+priors.f90
+priors.mod
+priors.o
+randomns.mod
+resutlJuly301041.txt
+spectrum_FERMI.dat
+spectrum_amp.dat
+spectrum_stepf.dat
+test.data
+utils.f90
+utils.o
+utils1.f90
+utils1.mod
+utils1.o
+xmeans_clstr.f90
+xmeans_clstr.mod
+xmeans_clstr.o
 
