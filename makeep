@@ -1,0 +1,5 @@
+#! /bin/bash
+  cd /scratch/xuewei/study/Dark/MultiNest_v2.18/eptestF
+  make clean
+  make
+

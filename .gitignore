@@ -2,10 +2,10 @@ Root/*.o
 Root/*.d
 Root/*.so
 Root/*.exe
+plot/
 FERMI_total_12months.dat
 Key.dat
 LICENCE
-Makefile
 PAMELA_electrons.dat
 README
 backmakefile
@@ -35,15 +35,11 @@ kmeans_clstr.f90
 kmeans_clstr.mod
 kmeans_clstr.o
 libnest3.a
-makeep
-nested.F90
 nested.mod
 nested.o
 obj_detect
-posterior.F90
 posterior.mod
 posterior.o
-priors.f90
 priors.mod
 priors.o
 randomns.mod
@@ -52,7 +48,6 @@ spectrum_FERMI.dat
 spectrum_amp.dat
 spectrum_stepf.dat
 test.data
-utils.f90
 utils.o
 utils1.f90
 utils1.mod
