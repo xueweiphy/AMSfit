@@ -1,0 +1,12 @@
+#! /bin/bash
+
+for mod in mod1 mod2 mod3
+do
+sed -e "252s/mod1/${mod}/g" dnde.cpp > dnde_mod.cpp
+sed -i "56s/mod1/${mod}/g" dnde_mod.cpp 
+make clean
+make
+./dnde_mod.exe
+done
+
+
