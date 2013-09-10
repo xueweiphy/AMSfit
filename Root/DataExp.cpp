@@ -76,7 +76,7 @@ int DataExp::LoadHess(string Name ){
    float** hessdata;
    string fname;
    fname = pathexp  + Name;
-   hessdata= read_file(fname,hessarow,6);
+   hessdata= read_file(fname,hessrow,6);
    for( int i = 0; i<hessrow; i++)
    {
       hessE[i] = hessdata[0][i];

@@ -1,10 +1,15 @@
 #include "main.h"
 
+int DrawData(){
+   
+   return 0;
+}
 
 #ifndef __CINT__
 void StandaloneApplication ( int argc , char ** argv ) {
 // eventually , evaluate the application parameters argc , argv
 // ==>> here the ROOT macroiscalled
+   DrawData();
 
 }
 

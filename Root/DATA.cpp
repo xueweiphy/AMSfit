@@ -7,14 +7,17 @@ DATA::DATA(int Sdim, int SdimT ,double LogE,
    path2="/scratch/xuewei/study/Dark/MultiNest_v2.18/chains/"   ;
    path3="/scratch/xuewei/study/Dark/MultiNest_v2.18/Root/"   ;
    prefix = Pref;
-   mod1Name = "dnde_mod1.dat";
+   //mod1Name = "dnde_mod1.dat";
    dim = Sdim;
+   sdim =dim;
    dimT = SdimT ;
    dimEx = dimT - dim;
+   double englogE,englogStep;
    englogE = LogE;
+   
    englogStep = Logstep;
-   eng = new double [logstep];
-   log10E = new double [logstep];
+   eng = new double [dim];
+   log10E = new double [dim];
    sigma = new double [dim];
    spectrum = new double [dim];
    spectrumM = new double [dim];
@@ -24,9 +27,9 @@ DATA::DATA(int Sdim, int SdimT ,double LogE,
    
    int ii;
    for ( int i = 0; i < dim; i++){
-      ii = sdim  - i -1;
-      log10E[i] =  englogE - ii * logstep
-      eng[i] = pow( 10., log10E);
+      ii = dim  - i -1;
+      log10E[i] =  englogE - ii * Logstep;
+      eng[i] = pow( 10, log10E[i]);
       cout<< "Energy "<< setw(5)<<ii<< setw(10)<<eng[i]<<endl;
    }
 
@@ -39,17 +42,18 @@ DATA::DATA(int Sdim, int SdimT ,double LogE,
    cout<<"Multinest has totally"<<dimT <<" parameters to be fitted"<<endl;
    cout<<dim<<" of which are DM spectrum amplitudes."<<endl;
    cout<<"the highest energy of the spetrum is 10^"<<englogE;
-   cout<<" with logstep "<< logstep<<endl;
+   cout<<" with logstep "<< Logstep<<endl;
 
 
 
 }
 
-int DATA::LoadMod1(){
-   name = path2+prefix + mod1Name; 
-   dataMod1 = read_file( name.c_str(), &tempInt, 3);
+int DATA::LoadMod1(string Name){
+   string fname;
+   fname = path2+prefix + Name; 
+   dataMod1 = read_file( fname.c_str(), dimT, 3);
    int ii; 
-   for ( int i ; i < sdim; i ; i++){
+   for ( int i ; i < sdim;  i++){
       ii = sdim - i -1 ;
       spectrumM[ii] = dataMod1[1][i];
       cout<<"amp"<<setw(5)<<ii<<setw(12)<<spectrum[ii];
@@ -57,7 +61,7 @@ int DATA::LoadMod1(){
       cout<<"  ,sigma"<<setw(12)<<sigma[ii]<<endl;
    }
 
-   for ( int i = sdim ; i< sdimT; i++)
+   for ( int i = sdim ; i< dimT; i++)
    {
       parEx[i-sdim] = dataMod1[1][i];
       sigEx[i-sdim] = dataMod1[2][i];
@@ -89,22 +93,25 @@ int DATA::GenSpectrum2(int BM){
 
 int DATA::LoadBestFit(string BfName){
    float** bestamp;
-   name = path2+prefix + BfName;
-   bestamp = read_file(str_temp.c_str(),sdimT,2);
+   string fname;
+   fname = path2+prefix + BfName;
+   bestamp = read_file(fname.c_str(),dimT,2);
    cout<<"===bestfit==="<<endl;
+   int ii;
    for ( int i=0; i< sdim; i++)
    {
       ii= sdim -i-1;
-      spectrumB[ii] = bestamp[1][i];
+      spectrum[ii] = bestamp[1][i];
       cout<<"amp"<<setw(5)<<ii<<setw(12)<<spectrum[ii]<<endl;
 
    }
-   shiftB=bestamp[1][sdim];
-   cout<<"shfit = " <<shiftB<<endl;
-   slpB=bestamp[1][sdim+1];
+   shift=bestamp[1][sdim];
+   cout<<"shfit = " <<shift<<endl;
+   slp=bestamp[1][sdim+1];
    cout<<"slope = " <<slp<<endl;
-   normpriB = bestamp[1][sdim+2];
+   normpri = bestamp[1][sdim+2];
    cout<<"primary electron normarlization = " <<normpri<<endl;
+   return 0;
 }
 
 
@@ -149,10 +156,12 @@ int DATA::LoadBackground(string Name, string Name2){
    fname = prefix + Name2; 
    float** stepffile;
    stepffile= read_file(fname.c_str(),sdim,dmnum);
+   int ii;
    for ( int j=0; j<dmnum; j++)
    {
       DMeng[j] = bgeng[j];
       DMflux[j] =0.;
+      
       for ( int i = 0 ; i < sdim; i++)
       {
          ii= sdim -i-1;
@@ -167,7 +176,7 @@ int DATA::LoadBackground(string Name, string Name2){
     }
 
 
-   
+   return 0; 
 }
 
 

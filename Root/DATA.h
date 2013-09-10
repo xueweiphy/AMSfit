@@ -39,8 +39,8 @@
 #include "Math/GSLIntegrator.h"
 #include "TSpectrum.h"
 #include "read.h"
-#include "bilinear.h"
-#include "nr.h"
+/*#include "bilinear.h"*/
+/*#include "nr.h"*/
 #include "DataExp.h"
 
 
@@ -52,10 +52,10 @@ protected:
    string prefix;
    string mod1Name;
    string name; // temporary string
-   int dim, dimT, dimEx;
+   int sdim,dim, dimT, dimEx;
    double *eng;
    double *log10E;
-   float **dataMod1,
+   float **dataMod1;
    int tempInt;
    double *spectrumM;
    double *spectrum;
@@ -81,11 +81,12 @@ protected:
 
 public:
    DATA(int, int, double, double, string Pref= "dmloglog9_3p3_0p3_");
+   int LoadMod1(string Name="dnde_mod1.dat");
    int LoadBestFit( string BfName = "dnde_best.dat");
    int GenSpectrum2(int);
    int DealFermi();
    int LoadBackground(string Name = "spectrum_kra.dat", 
-         Name2 = "spectrum_stepf.dat")
+         string Name2 = "spectrum_stepf.dat");
    
 };
 

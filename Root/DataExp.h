@@ -39,8 +39,8 @@
 #include "Math/GSLIntegrator.h"
 #include "TSpectrum.h"
 #include "read.h"
-#include "bilinear.h"
-#include "nr.h"
+/*#include "bilinear.h"*/
+/*#include "nr.h"*/
 
 
 using namespace std;

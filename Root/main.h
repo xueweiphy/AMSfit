@@ -23,7 +23,7 @@
 #include "TApplication.h"
 #include "TNtuple.h"
 #include "TMath.h"
-#include "read.cpp"
+#include "read.h"
 #include "Math/Interpolator.h"
 #include "Math/InterpolationTypes.h"
 #include "Math/Polynomial.h"
