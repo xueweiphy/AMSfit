@@ -3,6 +3,9 @@ Root/*.d
 Root/*.so
 Root/*.exe
 plot/
+eptestF/
+*.o
+*.exe
 FERMI_total_12months.dat
 Key.dat
 LICENCE
@@ -16,7 +19,6 @@ chains2/
 epmain
 epmain_test2
 eptestF.tar
-eptestF/
 eptestF_v2.tar
 eptestF_v2.tar.gz
 eptestF_v3.tar
