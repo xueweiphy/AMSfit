@@ -65,6 +65,18 @@ protected:
    double *sigEx;
    double shiftM, slpM, normpriM;
    double shift, slp, normpri;
+   static const int bglnum =  146;
+   float bgeflux[bglnum],bgpflux[bglnum],bgeng[bglnum];
+   float bgepflux3[bglnum];
+   static const int dmnum =  146;
+   float DMflux[dmnum];
+   float DMflux3[dmnum];
+   float DMeng[dmnum];
+   float epTotal[dmnum];
+   float eTotal[dmnum];
+   float epratio[dmnum];
+
+
 
 
 public:
@@ -72,6 +84,8 @@ public:
    int LoadBestFit( string BfName = "dnde_best.dat");
    int GenSpectrum2(int);
    int DealFermi();
+   int LoadBackground(string Name = "spectrum_kra.dat", 
+         Name2 = "spectrum_stepf.dat")
    
 };
 

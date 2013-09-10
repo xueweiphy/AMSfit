@@ -5,7 +5,7 @@ LIB1=.
 CFLAGS=-c -g -Wall `root-config --cflags` -I${LIB1}
 LDFLAGS=`root-config --glibs`
 LDFLAGS2=${ROOTSYS}/lib
-SOURCES=dnde_loglog.cpp
+SOURCES=main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=$(SOURCES:.cpp=.exe)
 HEADERS=$(SOURCES:.cpp=.h)

@@ -132,13 +132,47 @@ int DATA::DealFermi(){
    return 0;
 }
 
-int DATA::LoadEpBackground(string Name){
+int DATA::LoadBackground(string Name, string Name2){
+   float** kradata;
+   string fname;
+   
+   fname = prefix + Name;
+   kradata = read_file( fname.c_str(),bglnum,3);
+   for ( int i =0; i< bglnum; i++)
+   {
+      bgeng[i] = kradata[0][i];
+      bgeflux[i] = kradata[1][i]*1.e4;
+      bgpflux[i] = kradata[2][i]*1.e4;
+      bgepflux3[i] = (bgpflux[i]+bgeflux[i])* pow( bgeng[i],3);
+   }
+  // Load Step function flux data 
+   fname = prefix + Name2; 
+   float** stepffile;
+   stepffile= read_file(fname.c_str(),sdim,dmnum);
+   for ( int j=0; j<dmnum; j++)
+   {
+      DMeng[j] = bgeng[j];
+      DMflux[j] =0.;
+      for ( int i = 0 ; i < sdim; i++)
+      {
+         ii= sdim -i-1;
+         DMflux[j] =  DMflux[j]+spectrum[ii]*stepffile[j][i]*1.e4;
+         //cout<<setw(5)<<i << setw(15)<<spectrum[ii]<<endl;
+      }
+      DMflux3[j] = 2.*DMflux[j]*pow(DMeng[j],3);
+      epTotal [j] = DMflux3[j]+ bgepflux3[j];
+      eTotal [j] = DMflux[j]+ bgeflux[j];
+      epratio [j] =( DMflux[j]+ bgpflux[j]) /
+         (2.* DMflux[j]+ bgpflux[j]+  bgeflux[j]) ;
+    }
 
 
-
-
-
+   
 }
+
+
+
+
 
 
 
