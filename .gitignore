@@ -1,3 +1,7 @@
+Root/*.o
+Root/*.d
+Root/*.so
+Root/*.exe
 FERMI_total_12months.dat
 Key.dat
 LICENCE
