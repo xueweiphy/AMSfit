@@ -56,7 +56,7 @@ int DataExp::LoadPamelaElectron(string Name ){
    float** pameladata;
    string fname;
    fname = pathexp  + Name;
-   pameladata= read_file(fname,pamelarow,5);
+   pameladata= read_file(fname,pamelarow,7);
    for( int i = 0; i<pamelarow; i++)
    {
       Rmin[i] = pameladata[0][i];

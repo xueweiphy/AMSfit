@@ -1,6 +1,11 @@
 #include "main.h"
 
 int DrawData(){
+   DATA * run1 = new DATA( 8, 11, 3.0, 0.3, "DmWoFermiLoglog8_3p0_0p3_");
+   run1 -> DataIni();
+   run1 -> RootIni(2,1);
+   run1 -> PlotElectronPositron(1, 1);
+   run1 -> PrintCanvas("Fermidata.pdf");
    
    return 0;
 }

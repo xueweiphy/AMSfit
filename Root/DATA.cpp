@@ -34,10 +34,6 @@ DATA::DATA(int Sdim, int SdimT ,double LogE,
    }
 
 
-   LoadFermi();
-   LoadAMS();
-   LoadPamelaElectron();
-   LoadHess();
 
    cout<<"Multinest has totally"<<dimT <<" parameters to be fitted"<<endl;
    cout<<dim<<" of which are DM spectrum amplitudes."<<endl;
@@ -47,6 +43,61 @@ DATA::DATA(int Sdim, int SdimT ,double LogE,
 
 
 }
+
+int DATA::DataIni(){
+   LoadFermi();
+   LoadAMS();
+   LoadPamelaElectron();
+   LoadHess();
+   LoadMod1();
+   LoadBestFit();
+   DealFermi();
+   LoadBackground();
+   return 0;
+}
+
+int DATA::RootIni( int a , int b){
+// set canvas number : a * b
+   gROOT-> SetStyle("Plain");
+   gStyle->SetPadTickY(1);
+   gStyle->SetPadTickX(1);
+   gStyle->SetPalette(1);
+   gStyle->SetOptStat(0);
+   gStyle -> SetTitleOffset(0.95,"x");
+   gStyle -> SetTitleOffset(0.95,"y");
+   gStyle->SetStatStyle(0);
+   gStyle->SetTitleStyle(0);
+   gStyle->SetTitleBorderSize(0);
+   gROOT->ForceStyle();
+   gStyle -> SetLegendBorderSize(0);
+   gStyle->SetTitleSize(0.05,"x");
+   gStyle->SetTitleSize(0.05,"y");
+   gStyle -> SetTitleX( 0.1f);
+   gStyle -> SetTitleW( 0.8f);
+   double ww,wh;
+   ww  = 400*a;
+   wh  = 300*b;
+   padnumx = a;
+   padnumy = b;
+   //c_cont = new TCanvas("c_cont"," ",1,1);
+   c1 = new TCanvas("c1"," ",ww,wh);
+   c1 -> Divide(a,b);
+   return 0;
+}
+
+
+int DATA::SetPad( TPad* padG){
+   padG->SetLeftMargin(0.10);
+   padG->SetRightMargin(0.02);
+   padG->SetBottomMargin(0.10);
+   padG->SetTopMargin(0.08);
+   padG -> SetLogx();
+   padG -> SetLogy();
+   return 0;
+}
+
+
+
 
 int DATA::LoadMod1(string Name){
    string fname;
@@ -143,7 +194,7 @@ int DATA::LoadBackground(string Name, string Name2){
    float** kradata;
    string fname;
    
-   fname = prefix + Name;
+   fname = path2+ prefix + Name;
    kradata = read_file( fname.c_str(),bglnum,3);
    for ( int i =0; i< bglnum; i++)
    {
@@ -153,7 +204,7 @@ int DATA::LoadBackground(string Name, string Name2){
       bgepflux3[i] = (bgpflux[i]+bgeflux[i])* pow( bgeng[i],3);
    }
   // Load Step function flux data 
-   fname = prefix + Name2; 
+   fname =path2+ prefix + Name2; 
    float** stepffile;
    stepffile= read_file(fname.c_str(),sdim,dmnum);
    int ii;
@@ -175,26 +226,103 @@ int DATA::LoadBackground(string Name, string Name2){
          (2.* DMflux[j]+ bgpflux[j]+  bgeflux[j]) ;
     }
 
-
    return 0; 
 }
 
 
 
+int DATA::PlotElectronPositron(int pnum, int expnum,string Title){
+   padData = ( TPad *) c1 -> GetPad( pnum);
+   SetPad(padData);
+   padData -> SetLogy(0);
+   //padData -> SetLogx();
+   c1 -> cd (pnum);
+   TGraphAsymmErrors *fermiP = new TGraphAsymmErrors(Frow,Feng,
+          Fflux3,NULL,NULL,Ferrorm,Ferrorp);
+   //TGraphAsymmErrors *fermiP2 = new TGraphAsymmErrors(Frow,Feng2,
+   //Fflux32,NULL,NULL,Ferrorp32,Ferrorp32);
+   //TGraphAsymmErrors *hessP = new TGraphAsymmErrors(hessrow,hessE,
+   //hessflux3,NULL,NULL,hesserrm,hesserrp);
+   //TGraphAsymmErrors *AMSepP = new TGraphAsymmErrors(AMSeplnum,AMSepE,
+   //AMSepF,NULL,NULL,AMSepErrd,AMSepErru);
+   fermiP->SetTitle(Title.c_str());
+   //fermiP-> CenterTitle(1);
+   fermiP->GetXaxis() -> SetTitle("Energy  [GeV]");
+   fermiP->GetXaxis() -> CenterTitle(1);
+   fermiP->GetYaxis() -> SetTitle("#Phi E^{3}  [m^{-2}s^{-1}sr^{-1}GeV^{2}]");
+   fermiP->GetYaxis() -> CenterTitle(1);
+   TAxis *axis = fermiP -> GetXaxis();
+   axis -> SetLimits(6.,3000.);
+   fermiP -> GetHistogram()->SetMaximum(250.);
+   fermiP -> GetHistogram()->SetMinimum(30.);
+   fermiP -> SetMarkerColor(2);
+   fermiP -> SetLineColor(2);
+   fermiP -> SetMarkerStyle(26);
+   fermiP -> SetMarkerSize(0.5);
+   fermiP -> Draw("AP");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   TGraph * DMepP = new TGraph(dmnum,DMeng, DMflux3);
+   DMepP -> Draw("C");
+   DMepP -> SetLineWidth(1.5);
    
+   TGraph * TepP = new TGraph(dmnum,DMeng, epTotal);
+   TepP->SetLineColor ( 4 ) ;
+   TepP -> SetLineWidth(1.8);
+   TepP -> Draw("C");
+
+
+   return 0;
+   
+}
+
+int DATA::PlotElectron(int pnum, int expnum,string Title){
+   padData = ( TPad *) c1 -> GetPad( pnum);
+   SetPad(padData);
+   //padData -> SetLogy(0);
+   //padData -> SetLogx(0);
+   c1 -> cd (pnum);
+   TGraphAsymmErrors *fermiP = new TGraphAsymmErrors(Frow,Feng,
+          Fflux3,NULL,NULL,Ferrorm,Ferrorp);
+   //TGraphAsymmErrors *fermiP2 = new TGraphAsymmErrors(Frow,Feng2,
+   //Fflux32,NULL,NULL,Ferrorp32,Ferrorp32);
+   //TGraphAsymmErrors *hessP = new TGraphAsymmErrors(hessrow,hessE,
+   //hessflux3,NULL,NULL,hesserrm,hesserrp);
+   //TGraphAsymmErrors *AMSepP = new TGraphAsymmErrors(AMSeplnum,AMSepE,
+   //AMSepF,NULL,NULL,AMSepErrd,AMSepErru);
+   fermiP->SetTitle(Title.c_str());
+   //fermiP-> CenterTitle(1);
+   fermiP->GetXaxis() -> SetTitle("Energy  [GeV]");
+   fermiP->GetXaxis() -> CenterTitle(1);
+   fermiP->GetYaxis() -> SetTitle("#Phi E^{3}  [m^{-2}s^{-1}sr^{-1}GeV^{2}]");
+   fermiP->GetYaxis() -> CenterTitle(1);
+   TAxis *axis = fermiP -> GetXaxis();
+   axis -> SetLimits(6.,3000.);
+   fermiP -> GetHistogram()->SetMaximum(250.);
+   fermiP -> GetHistogram()->SetMinimum(30.);
+   fermiP -> SetMarkerColor(2);
+   fermiP -> SetLineColor(2);
+   fermiP -> SetMarkerStyle(26);
+   fermiP -> SetMarkerSize(0.5);
+   fermiP -> Draw("AP");
+
+   TGraph * DMepP = new TGraph(dmnum,DMeng, DMflux3);
+   DMepP -> Draw("C");
+   DMepP -> SetLineWidth(1.5);
+   
+   TGraph * TepP = new TGraph(dmnum,DMeng, epTotal);
+   TepP->SetLineColor ( 4 ) ;
+   TepP -> SetLineWidth(1.8);
+   TepP -> Draw("C");
+
+
+   return 0;
+   
+}
+
+
+int DATA::PrintCanvas(const char* name){
+   c1 -> Print(name);
+   return 0;
+}
+
+

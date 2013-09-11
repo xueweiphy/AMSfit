@@ -75,6 +75,10 @@ protected:
    float epTotal[dmnum];
    float eTotal[dmnum];
    float epratio[dmnum];
+   TCanvas *c1;
+   TPad * padData;
+   int padnumx;   
+   int padnumy;
 
 
 
@@ -87,7 +91,14 @@ public:
    int DealFermi();
    int LoadBackground(string Name = "spectrum_kra.dat", 
          string Name2 = "spectrum_stepf.dat");
-   
+   int RootIni(int, int);
+   int DataIni();
+   int SetPad(TPad *);
+   int PlotElectronPositron( int, int,string Title="Electron + Positron");
+   int PlotElectron( int, int,string Title="Electron");
+   int PrintCanvas(const char* );
+
+
 };
 
 #endif
