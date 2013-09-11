@@ -104,7 +104,8 @@ int DATA::LoadMod1(string Name){
    fname = path2+prefix + Name; 
    dataMod1 = read_file( fname.c_str(), dimT, 3);
    int ii; 
-   for ( int i ; i < sdim;  i++){
+      cout<<"===== Load Mod1 ===="<<endl;
+   for ( int i=0 ; i < sdim;  i++){
       ii = sdim - i -1 ;
       spectrumM[ii] = dataMod1[1][i];
       cout<<"amp"<<setw(5)<<ii<<setw(12)<<spectrum[ii];
@@ -247,9 +248,9 @@ int DATA::PlotElectronPositron(int pnum, int expnum,string Title){
    //AMSepF,NULL,NULL,AMSepErrd,AMSepErru);
    fermiP->SetTitle(Title.c_str());
    //fermiP-> CenterTitle(1);
-   fermiP->GetXaxis() -> SetTitle("Energy  [GeV]");
+   fermiP->GetXaxis() -> SetTitle("Energy  [ GeV ]");
    fermiP->GetXaxis() -> CenterTitle(1);
-   fermiP->GetYaxis() -> SetTitle("#Phi E^{3}  [m^{-2}s^{-1}sr^{-1}GeV^{2}]");
+   fermiP->GetYaxis() -> SetTitle("#Phi E^{3}  [ GeV^{2} m^{-2}s^{-1}sr^{-1} ]");
    fermiP->GetYaxis() -> CenterTitle(1);
    TAxis *axis = fermiP -> GetXaxis();
    axis -> SetLimits(6.,3000.);
@@ -281,43 +282,95 @@ int DATA::PlotElectron(int pnum, int expnum,string Title){
    //padData -> SetLogy(0);
    //padData -> SetLogx(0);
    c1 -> cd (pnum);
-   TGraphAsymmErrors *fermiP = new TGraphAsymmErrors(Frow,Feng,
-          Fflux3,NULL,NULL,Ferrorm,Ferrorp);
-   //TGraphAsymmErrors *fermiP2 = new TGraphAsymmErrors(Frow,Feng2,
-   //Fflux32,NULL,NULL,Ferrorp32,Ferrorp32);
-   //TGraphAsymmErrors *hessP = new TGraphAsymmErrors(hessrow,hessE,
-   //hessflux3,NULL,NULL,hesserrm,hesserrp);
-   //TGraphAsymmErrors *AMSepP = new TGraphAsymmErrors(AMSeplnum,AMSepE,
-   //AMSepF,NULL,NULL,AMSepErrd,AMSepErru);
-   fermiP->SetTitle(Title.c_str());
-   //fermiP-> CenterTitle(1);
-   fermiP->GetXaxis() -> SetTitle("Energy  [GeV]");
-   fermiP->GetXaxis() -> CenterTitle(1);
-   fermiP->GetYaxis() -> SetTitle("#Phi E^{3}  [m^{-2}s^{-1}sr^{-1}GeV^{2}]");
-   fermiP->GetYaxis() -> CenterTitle(1);
-   TAxis *axis = fermiP -> GetXaxis();
-   axis -> SetLimits(6.,3000.);
-   fermiP -> GetHistogram()->SetMaximum(250.);
-   fermiP -> GetHistogram()->SetMinimum(30.);
-   fermiP -> SetMarkerColor(2);
-   fermiP -> SetLineColor(2);
-   fermiP -> SetMarkerStyle(26);
-   fermiP -> SetMarkerSize(0.5);
-   fermiP -> Draw("AP");
+   TGraphErrors *pamelaP = new TGraphErrors(pamelarow,pamelaE,
+            pamelaflux,NULL,pamelaerr);
+   pamelaP->SetTitle(Title.c_str());
+   pamelaP->GetXaxis() -> SetTitle("Energy  [ GeV ]");
+   pamelaP->GetXaxis() -> CenterTitle(1);
+   //pamelaP->GetYaxis() -> SetTitle("#Phi (e^{-}) ");
+   pamelaP->GetYaxis() -> SetTitle("#Phi [ GeV^{-1} m^{-2}s^{-1}sr^{-1} ]");
+   pamelaP->GetYaxis() -> CenterTitle(1);
+   TAxis *axis = pamelaP -> GetXaxis();
+   axis -> SetLimits(5.,5000.);
+   //   pamelaP -> GetHistogram()->SetMaximum(250.);
+   pamelaP -> GetHistogram()->SetMinimum(1.e-8);
+   pamelaP -> SetMarkerColor(2);
+   pamelaP -> SetLineColor(2);
+   pamelaP -> SetMarkerStyle(26);
+   pamelaP -> SetMarkerSize(0.5);
+   pamelaP -> Draw("AP");
 
-   TGraph * DMepP = new TGraph(dmnum,DMeng, DMflux3);
-   DMepP -> Draw("C");
-   DMepP -> SetLineWidth(1.5);
-   
-   TGraph * TepP = new TGraph(dmnum,DMeng, epTotal);
-   TepP->SetLineColor ( 4 ) ;
-   TepP -> SetLineWidth(1.8);
-   TepP -> Draw("C");
 
+   TGraph * etotalP = new TGraph(bglnum,bgeng, eTotal);
+   etotalP -> SetLineWidth(1.8);
+   etotalP -> Draw("C");
 
    return 0;
    
 }
+
+
+int DATA::PlotRatio(int pnum, int expnum,string Title){
+   padData = ( TPad *) c1 -> GetPad( pnum);
+   SetPad(padData);
+   padData -> SetLogy(0);
+   //padData -> SetLogx(0);
+   c1 -> cd (pnum);
+
+   TGraphErrors *amsP = new TGraphErrors(AMSrow,AMSE,AMSpr,NULL,AMSerr);
+
+   amsP->SetTitle(Title.c_str());
+   amsP->GetXaxis() -> SetTitle("Energy  [ GeV ]");
+   amsP->GetXaxis() -> CenterTitle(1);
+   amsP->GetYaxis() -> SetTitle("#Phi (e^{+}) / [ #Phi(e^{-})+ #Phi(e^{+}) ]"    );
+   amsP->GetYaxis() -> CenterTitle(1);
+   amsP -> SetMarkerColor(2);
+   amsP -> SetLineColor(2);
+   amsP -> SetMarkerStyle(24);
+   amsP -> SetMarkerSize(0.5);
+   amsP -> Draw("AP");
+   TAxis *axis = amsP -> GetXaxis();
+   axis -> SetLimits(5.,1000.);
+   //amsP -> GetHistogram()->SetMaximum(250.);
+   //amsP -> GetHistogram()->SetMinimum(30.);
+
+   TGraph * eprP = new TGraph(bglnum,bgeng, epratio);
+   eprP -> Draw("C");
+
+   return 0;
+   
+}
+
+
+int DATA::PlotdNdE(int pnum, string Title){
+   padData = ( TPad *) c1 -> GetPad( pnum);
+   SetPad(padData);
+   //padData -> SetLogy(0);
+   //padData -> SetLogx(0);
+   c1 -> cd (pnum);
+   //for ( int i = 0; i< sdim ; i++){
+   //cout<< setw(10)<< eng[i];
+   //cout<< setw(10)<< spectrumM[i];
+   //cout<< setw(10)<< sigma[i];
+   //cout<< endl;
+   //}
+   TGraphErrors *gr = new TGraphErrors(sdim,eng,spectrumM,NULL,sigma);
+   gr->SetTitle(Title.c_str());
+   gr->GetXaxis() -> SetTitle("Energy  [ GeV ]");
+   gr->GetXaxis() -> CenterTitle(1);
+   gr->GetYaxis() -> SetTitle("dN/dE  [ GeV^{-1} ]");
+   gr->GetYaxis() -> CenterTitle(1);
+   gr->SetMarkerColor ( 4 ) ;
+   gr->SetMarkerStyle(7);
+   gr->SetLineColor ( 4 ) ;
+   gr->SetLineWidth ( 1.6 ) ;
+   gr->Draw("AP");
+   
+   return 0;
+}
+
+
+
 
 
 int DATA::PrintCanvas(const char* name){

@@ -94,8 +94,12 @@ public:
    int RootIni(int, int);
    int DataIni();
    int SetPad(TPad *);
-   int PlotElectronPositron( int, int,string Title="Electron + Positron");
-   int PlotElectron( int, int,string Title="Electron");
+   int PlotElectronPositron( int, int expnum =1,
+         string Title="Electron + Positron");
+   int PlotElectron( int, int expnum =1,string Title="Electron");
+   int PlotRatio( int, int expnum =1,
+         string Title="Electron Positron Ratio");
+   int PlotdNdE( int,  string Title="Dark Matter Spectrum with Errors");
    int PrintCanvas(const char* );
 
 
