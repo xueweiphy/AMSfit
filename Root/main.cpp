@@ -2,12 +2,14 @@
 
 int DrawData(){
    DATA * run1 = new DATA( 8, 11, 3.0, 0.3, "DmWoFermiLoglog8_3p0_0p3_");
+   //DATA * run1 = new DATA( 7, 10, 2.7, 0.3, "DmWoFermiLoglog7_2p7_0p3_");
    run1 -> DataIni();
    run1 -> RootIni(2,2);
    run1 -> PlotElectronPositron(1);
    run1 -> PlotElectron(2);
    run1 -> PlotRatio(3);
    run1 -> PlotdNdE(4);
+   //run1 -> PrintCanvas("DmWoFermiLoglog7_2p7_0p3.pdf");
    run1 -> PrintCanvas("DmWoFermiLoglog8_3p0_0p3.pdf");
    
    return 0;

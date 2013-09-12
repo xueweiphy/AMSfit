@@ -223,6 +223,8 @@ int DATA::LoadBackground(string Name, string Name2){
       DMflux3[j] = 2.*DMflux[j]*pow(DMeng[j],3);
       epTotal [j] = DMflux3[j]+ bgepflux3[j];
       eTotal [j] = DMflux[j]+ bgeflux[j];
+      eTotal2 [j] = (DMflux[j]+ bgeflux[j])*pow(DMeng[j],2);
+      eTotal3 [j] = (DMflux[j]+ bgeflux[j])*pow(DMeng[j],3);
       epratio [j] =( DMflux[j]+ bgpflux[j]) /
          (2.* DMflux[j]+ bgpflux[j]+  bgeflux[j]) ;
     }
@@ -279,21 +281,33 @@ int DATA::PlotElectronPositron(int pnum, int expnum,string Title){
 int DATA::PlotElectron(int pnum, int expnum,string Title){
    padData = ( TPad *) c1 -> GetPad( pnum);
    SetPad(padData);
-   //padData -> SetLogy(0);
+   padData -> SetLogy(0);
    //padData -> SetLogx(0);
    c1 -> cd (pnum);
+   float pamelaflux2[pamelarow];
+   float pamelaflux3[pamelarow];
+   float pamelaerr3[pamelarow];
+   float pamelaerr2[pamelarow];
+   for ( int i = 0; i< pamelarow; i++){
+      pamelaflux2[i] = pamelaflux[i]* pow(pamelaE[i],2);
+      pamelaflux3[i] = pamelaflux[i]* pow(pamelaE[i],3);
+      pamelaerr3[i] = pamelaerr[i]* pow(pamelaE[i],3);
+      pamelaerr2[i] = pamelaerr[i]* pow(pamelaE[i],2);
+      //cout<< pamelaflux2[i]<<endl;
+   }
    TGraphErrors *pamelaP = new TGraphErrors(pamelarow,pamelaE,
-            pamelaflux,NULL,pamelaerr);
+            pamelaflux3,NULL,pamelaerr3);
    pamelaP->SetTitle(Title.c_str());
    pamelaP->GetXaxis() -> SetTitle("Energy  [ GeV ]");
    pamelaP->GetXaxis() -> CenterTitle(1);
    //pamelaP->GetYaxis() -> SetTitle("#Phi (e^{-}) ");
-   pamelaP->GetYaxis() -> SetTitle("#Phi [ GeV^{-1} m^{-2}s^{-1}sr^{-1} ]");
+   //pamelaP->GetYaxis() -> SetTitle("#Phi [ GeV^{2} m^{-2}s^{-1}sr^{-1} ]");
+   pamelaP->GetYaxis() -> SetTitle("#Phi E^{3}  [ GeV^{2} m^{-2}s^{-1}sr^{-1} ]");
    pamelaP->GetYaxis() -> CenterTitle(1);
    TAxis *axis = pamelaP -> GetXaxis();
-   axis -> SetLimits(5.,5000.);
-   //   pamelaP -> GetHistogram()->SetMaximum(250.);
-   pamelaP -> GetHistogram()->SetMinimum(1.e-8);
+   axis -> SetLimits(6.,3000.);
+   pamelaP -> GetHistogram()->SetMaximum(250.);
+   pamelaP -> GetHistogram()->SetMinimum(30);
    pamelaP -> SetMarkerColor(2);
    pamelaP -> SetLineColor(2);
    pamelaP -> SetMarkerStyle(26);
@@ -301,7 +315,7 @@ int DATA::PlotElectron(int pnum, int expnum,string Title){
    pamelaP -> Draw("AP");
 
 
-   TGraph * etotalP = new TGraph(bglnum,bgeng, eTotal);
+   TGraph * etotalP = new TGraph(bglnum,bgeng, eTotal3);
    etotalP -> SetLineWidth(1.8);
    etotalP -> Draw("C");
 
@@ -348,22 +362,34 @@ int DATA::PlotdNdE(int pnum, string Title){
    //padData -> SetLogy(0);
    //padData -> SetLogx(0);
    c1 -> cd (pnum);
-   //for ( int i = 0; i< sdim ; i++){
+   double spectrumM1[sdim];
+   double spectrumM2[sdim];
+   double sigma1[sdim];
+   double sigma2[sdim];
+   for ( int i = 0; i< sdim ; i++){
+      spectrumM1[i] = spectrumM[i]*eng[i];
+      spectrumM2[i] = spectrumM1[i]*eng[i];
+      sigma1[i] = sigma[i]*eng[i];
+      sigma2[i] = sigma1[i]*eng[i];
    //cout<< setw(10)<< eng[i];
    //cout<< setw(10)<< spectrumM[i];
    //cout<< setw(10)<< sigma[i];
    //cout<< endl;
-   //}
-   TGraphErrors *gr = new TGraphErrors(sdim,eng,spectrumM,NULL,sigma);
+   }
+   TGraphErrors *gr = new TGraphErrors(sdim,eng,spectrumM1,NULL,sigma1);
    gr->SetTitle(Title.c_str());
    gr->GetXaxis() -> SetTitle("Energy  [ GeV ]");
    gr->GetXaxis() -> CenterTitle(1);
-   gr->GetYaxis() -> SetTitle("dN/dE  [ GeV^{-1} ]");
+   gr->GetYaxis() -> SetTitle("E dN/dE ");
    gr->GetYaxis() -> CenterTitle(1);
    gr->SetMarkerColor ( 4 ) ;
    gr->SetMarkerStyle(7);
    gr->SetLineColor ( 4 ) ;
    gr->SetLineWidth ( 1.6 ) ;
+   TAxis *axis = gr -> GetXaxis();
+   axis -> SetLimits(5.,2000.);
+   //gr -> GetHistogram()->SetMaximum(250.);
+   //gr -> GetHistogram()->SetMinimum(50.);
    gr->Draw("AP");
    
    return 0;

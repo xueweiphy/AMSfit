@@ -74,6 +74,8 @@ protected:
    float DMeng[dmnum];
    float epTotal[dmnum];
    float eTotal[dmnum];
+   float eTotal2[dmnum];
+   float eTotal3[dmnum];
    float epratio[dmnum];
    TCanvas *c1;
    TPad * padData;
